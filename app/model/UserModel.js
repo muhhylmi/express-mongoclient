@@ -1,6 +1,7 @@
 const BaseDao = require("../helper/BaseDao");
 const bcrypt = require("bcrypt");
 const { ObjectId } = require("bson");
+const jwt = require('jsonwebtoken');
 
 
 const UserModel = class UserModel extends BaseDao {
@@ -12,6 +13,10 @@ const UserModel = class UserModel extends BaseDao {
     async getAllUser() {
         try {
             let data = await (await this.find()).toArray();
+            data = data.map(value => {
+                delete value.password;
+                return value;
+            })
             return this.response(true, data, []);
         } catch (error) {
             return this.response(false, [], [error.message])
@@ -94,6 +99,27 @@ const UserModel = class UserModel extends BaseDao {
             return this.response(true, [], []);
         } catch (error) {
             return this.response(false, [], [err.message]);
+        }
+    }
+
+    async login(request) {
+        try {
+            let data = await (await this.findOne({
+                'username': request.username
+            }))
+            if (data) {
+                let check_password = bcrypt.compareSync(request.password, data.password);
+                if (check_password) {
+                    delete data.password;
+                    data._id = data._id.toString();
+                    data.token = jwt.sign(data, process.env.PRIVATE_KEY_JWT, { expiresIn: '1d' });
+                    return this.response(true, data, []);
+                }
+            }
+            return this.response(true, [], ['invalid credentials']);
+        } catch (error) {
+            console.log(error);
+            return this.response(false, [], [error.message]);
         }
     }
 
