@@ -58,6 +58,18 @@ const UserController = class UserController {
             res.status(400).json(error.message);
         }
     }
+
+    login = async function (req, res) {
+        try {
+            let data = await (new UserModel).login(req.body);
+            if (data.success) {
+                return res.status(200).json(data);
+            }
+            res.status(201).json(data);
+        } catch (error) {
+            res.status(400).json(error.message);
+        }
+    }
 }
 
 module.exports = UserController;

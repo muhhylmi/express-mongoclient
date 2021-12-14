@@ -3,15 +3,18 @@ const express = require('express');
 const app = express();
 const route = require('./routes/Route');
 var bodyParser = require('body-parser')
-
+const middleware = require('./middleware/Middleware');
 const { MongoClient } = require('mongodb');
 const BaseDao = require('./helper/BaseDao');
 
 const PORT = 8000;
 
 app.use(bodyParser.json());
-app.use(route);
-
+app.use(middleware);
+app.use('/api', route);
+app.use('*', function (req, res) {
+    res.status(404).json({ status: false, message: 'page not found' });
+});
 
 MongoClient.connect(
     process.env.DB_URI,
