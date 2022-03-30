@@ -75,7 +75,7 @@ const BaseDao = class BaseDao {
             cursor = await dbconn.collection(this.collection).updateMany(query, set);
         } catch (error) {
             console.log(error);
-            return [];
+            return error.message;
         }
         return cursor;
     }
@@ -91,7 +91,7 @@ const BaseDao = class BaseDao {
             cursor = await dbconn.collection(this.collection).insertOne(query);
         } catch (error) {
             console.log(error);
-            return;
+            return error.message;
         }
         return cursor;
     }
@@ -107,7 +107,7 @@ const BaseDao = class BaseDao {
             cursor = await dbconn.collection(this.collection).insertMany(query);
         } catch (error) {
             console.log(error);
-            return;
+            return error.message;
         }
         return cursor;
     }
@@ -118,7 +118,7 @@ const BaseDao = class BaseDao {
             cursor = await dbconn.collection(this.collection).deleteOne(query);
         } catch (error) {
             console.log(error);
-            return;
+            return error.message;
         }
         return cursor;
     }
