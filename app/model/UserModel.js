@@ -1,4 +1,4 @@
-const BaseDao = require("../helper/BaseDao");
+const BaseDao = require("../helper/DatabaseHelper");
 const bcrypt = require("bcrypt");
 const { ObjectId } = require("bson");
 const jwt = require('jsonwebtoken');

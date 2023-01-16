@@ -1,13 +1,16 @@
 require('dotenv').config({ path: "../.env" })
 const express = require('express');
 const app = express();
-const route = require('./routes/Route');
+const route = require('./app/routes/Route');
 var bodyParser = require('body-parser')
-const middleware = require('./middleware/Middleware');
+const middleware = require('./app/middleware/Middleware');
 const { MongoClient } = require('mongodb');
-const BaseDao = require('./helper/BaseDao');
+const BaseDao = require('./app/helper/DatabaseHelper');
+const config = require('./app/config/config');
+const logger = require('./app/helper/logger');
+const PORT = config.get('/port');
 
-const PORT = 8000;
+logger.enableLogging();
 
 app.use(bodyParser.json());
 app.use(middleware);
@@ -17,17 +20,17 @@ app.use('*', function (req, res) {
 });
 
 MongoClient.connect(
-    process.env.DB_URI,
+    config.get('/mongodbURL'),
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     }
 ).catch(err => {
-    console.error(err.stack)
+    logger.error('index', err.message, 'mongodbConnect')
     process.exit()
 }).then(async client => {
     await BaseDao.injectDB(client);
     app.listen(PORT, () => {
-        console.log(`Server started on port ${PORT}`);
+        logger.info('index', `Server started on port ${PORT}`, 'start server');
     })
 })

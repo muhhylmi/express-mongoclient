@@ -1,0 +1,30 @@
+{
+  "name": "express-mongoclient",
+  "version": "1.0.0",
+  "description": "create rest api with mongodb native without mongoose",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muhhylmi/express-mongoclient.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/muhhylmi/express-mongoclient/issues"
+  },
+  "homepage": "https://github.com/muhhylmi/express-mongoclient#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "confidence": "^5.0.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb": "^4.13.0",
+    "winston": "^3.8.2"
+  }
+}

@@ -1,7 +1,9 @@
 let dbconn
 
-const BaseDao = class BaseDao {
-    collection;
+const Database = class Database {
+    constructor(collection){
+        this.collection = collection
+    }
     static async injectDB(conn) {
         if (dbconn) {
             return
@@ -124,4 +126,4 @@ const BaseDao = class BaseDao {
     }
 }
 
-module.exports = BaseDao
+module.exports = Database
