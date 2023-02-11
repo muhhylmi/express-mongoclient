@@ -52,7 +52,8 @@ class Database {
     async updateOne(query, set) {
         let cursor;
         try {
-            cursor = await this.db.collection(this.collection).updateOne(query, set);
+            const db = await connection.getConnection();
+            cursor = await db.collection(this.collection).updateOne(query, set);
         } catch (error) {
             logger.error('DatabaseHelper-updateOne', error.message);
             return error.message;
@@ -69,7 +70,8 @@ class Database {
     async updateMany(query, set) {
         let cursor;
         try {
-            cursor = await this.db.collection(this.collection).updateMany(query, set);
+            const db = await connection.getConnection();
+            cursor = await db.collection(this.collection).updateMany(query, set);
         } catch (error) {
             logger.error('DatabaseHelper-updateMany', error.message);
             return [];
@@ -85,7 +87,8 @@ class Database {
     async insertOne(query) {
         let cursor;
         try {
-            cursor = await this.db.collection(this.collection).insertOne(query);
+            const db = await connection.getConnection();
+            cursor = await db.collection(this.collection).insertOne(query);
         } catch (error) {
             logger.error('DatabaseHelper-insertOne', error.message);
             return;
@@ -101,7 +104,8 @@ class Database {
     async insertMany(query) {
         let cursor;
         try {
-            cursor = await this.db.collection(this.collection).insertMany(query);
+            const db = await connection.getConnection();
+            cursor = await db.collection(this.collection).insertMany(query);
         } catch (error) {
             logger.error('DatabaseHelper-insertMany', error.message);
             return;
@@ -112,7 +116,8 @@ class Database {
     async deleteOne(query) {
         let cursor;
         try {
-            cursor = await this.db.collection(this.collection).deleteOne(query);
+            const db = await connection.getConnection();
+            cursor = await db.collection(this.collection).deleteOne(query);
         } catch (error) {
             logger.error('DatabaseHelper-deleteOne', error.message);
             return;

@@ -1,5 +1,5 @@
 const { ObjectId } = require("bson");
-const DBHelper = require('../helper/database/databaseHelper');
+const DBHelper = require('../helper/database/database_helper');
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
@@ -16,7 +16,7 @@ class UserModel {
 
     async getAllUser() {
         try {
-            const data = await db.find();
+            let data = await db.find();
             data = data.map(value => {
                 delete value.password;
                 return value;
@@ -35,7 +35,7 @@ class UserModel {
             }
             const hash = bcrypt.hashSync(request.password, 5);
             request.password = hash;
-            let data = await (await this.insertOne(request));
+            let data = await (await db.insertOne(request));
             if (data.acknowledged) {
                 return this.response(true, data, ['success add data'])
             } else {
@@ -129,7 +129,7 @@ class UserModel {
     }
 
     response(success, data, message) {
-        return { success: success, data: data, message: message }
+        return { success, data, message }
     }
 }
 

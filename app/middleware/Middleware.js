@@ -1,18 +1,19 @@
 const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
-const DBHelper = require('../helper/database/databaseHelper');
+const DBHelper = require('../helper/database/database_helper');
 const db = new DBHelper('user');
 
 
-app.use((req, res, next) => {
+app.use( async (req, res, next) => {
     let route = req.method + ' ' + req.url;
     let checkRoute = checkRouteWithoutToken(route);
-    let checkToken = checkAuthorization(req.headers.authorization, res);
+    let checkToken = await checkAuthorization(req.headers.authorization, res);
     if (checkRoute) {
         return next();
     }
     if (checkToken) {
+        req.user = checkToken;
         return next();
     }
     res.status(404).json({ status: false, message: 'Unathorized' });
@@ -37,16 +38,12 @@ const checkAuthorization = async function (token = null, res) {
     }
     let tokenArray = token.split(" ");
     try {
+        let result = '';
         let decode = jwt.verify(tokenArray[1], process.env.PRIVATE_KEY_JWT);
-        let dataUser = db.findOne({ 'username': decode.username });
-        let result = true;
-        dataUser.then(res => {
-            if (res) {
-                result = true;
-            } else {
-                result = false;
-            }
-        })
+        let dataUser = await db.findOne({ 'username': decode.username });
+        if(dataUser){
+            return dataUser
+        }
         return result;
     } catch (error) {
         res.status(404).json({ status: false, message: error.message });
