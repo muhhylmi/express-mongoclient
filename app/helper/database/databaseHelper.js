@@ -1,27 +1,18 @@
-let dbconn
+const logger = require('../logger');
 
-const Database = class Database {
-    constructor(collection){
+class Database {
+    constructor(db, collection){
+        this.db = db,
         this.collection = collection
-    }
-    static async injectDB(conn) {
-        if (dbconn) {
-            return
-        }
-        try {
-            dbconn = await conn.db(process.env.DB_NAME)
-            this.dbconn = dbconn
-        } catch (e) {
-            console.error(e)
-        }
     }
 
     async aggregate(query) {
+        const ctx = 'Database-aggregate'
         let cursor;
         try {
-            cursor = await dbconn.collection(this.collection).aggregate(query);
+            cursor = await this.db.collection(this.collection).aggregate(query);
         } catch (error) {
-            console.log(error);
+            logger.error(ctx, error.message, 'aggregate');
             return []
         }
         return cursor;
@@ -30,9 +21,9 @@ const Database = class Database {
     async findOne(query, project = {}) {
         let cursor;
         try {
-            cursor = await dbconn.collection(this.collection).findOne(query, project);
+            cursor = await this.db.collection(this.collection).findOne(query, project);
         } catch (error) {
-            console.log(error);
+            logger.error('DatabaseHelper-findOne', error.message);
             return [];
         }
         return cursor;
@@ -41,9 +32,9 @@ const Database = class Database {
     async find(query, project = {}) {
         let cursor;
         try {
-            cursor = await dbconn.collection(this.collection).find(query, project);
+            cursor = await this.db.collection(this.collection).find(query, project);
         } catch (error) {
-            console.log(error);
+            logger.error('DatabaseHelper-find', error.message);
             return [];
         }
         return cursor;
@@ -58,8 +49,9 @@ const Database = class Database {
     async updateOne(query, set) {
         let cursor;
         try {
-            cursor = await dbconn.collection(this.collection).updateOne(query, set);
+            cursor = await this.db.collection(this.collection).updateOne(query, set);
         } catch (error) {
+            logger.error('DatabaseHelper-updateOne', error.message);
             return error.message;
         }
         return cursor;
@@ -74,9 +66,9 @@ const Database = class Database {
     async updateMany(query, set) {
         let cursor;
         try {
-            cursor = await dbconn.collection(this.collection).updateMany(query, set);
+            cursor = await this.db.collection(this.collection).updateMany(query, set);
         } catch (error) {
-            console.log(error);
+            logger.error('DatabaseHelper-updateMany', error.message);
             return [];
         }
         return cursor;
@@ -90,9 +82,9 @@ const Database = class Database {
     async insertOne(query) {
         let cursor;
         try {
-            cursor = await dbconn.collection(this.collection).insertOne(query);
+            cursor = await this.db.collection(this.collection).insertOne(query);
         } catch (error) {
-            console.log(error);
+            logger.error('DatabaseHelper-insertOne', error.message);
             return;
         }
         return cursor;
@@ -106,9 +98,9 @@ const Database = class Database {
     async insertMany(query) {
         let cursor;
         try {
-            cursor = await dbconn.collection(this.collection).insertMany(query);
+            cursor = await this.db.collection(this.collection).insertMany(query);
         } catch (error) {
-            console.log(error);
+            logger.error('DatabaseHelper-insertMany', error.message);
             return;
         }
         return cursor;
@@ -117,9 +109,9 @@ const Database = class Database {
     async deleteOne(query) {
         let cursor;
         try {
-            cursor = await dbconn.collection(this.collection).deleteOne(query);
+            cursor = await this.db.collection(this.collection).deleteOne(query);
         } catch (error) {
-            console.log(error);
+            logger.error('DatabaseHelper-deleteOne', error.message);
             return;
         }
         return cursor;

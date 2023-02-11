@@ -1,13 +1,14 @@
 const UserModel = require("../model/UserModel");
+const userModel = new UserModel();
 
 const UserController = class UserController {
     getAllUser = async function (req, res) {
         try {
-            let data = await (new UserModel).getAllUser();
+            let data = await userModel.getAllUser();
             if (data.success) {
                 return res.status(200).json(data);
             }
-            res.send(data);
+            res.status(201).json(data);
         } catch (error) {
             res.status(500).json(error.message)
         }
@@ -15,7 +16,7 @@ const UserController = class UserController {
 
     createUser = async function (req, res) {
         try {
-            let data = await (new UserModel).createUser(req.body);
+            let data = await userModel.createUser(req.body);
             if (data.success) {
                 return res.status(200).json(data);
             }
@@ -27,7 +28,7 @@ const UserController = class UserController {
     }
 
     getUserById = async function (req, res) {
-        let data = await (new UserModel).findById(req.params.id);
+        let data = await userModel.findById(req.params.id);
         if (data.success) {
             return res.status(200).send(data);
         }
@@ -36,7 +37,7 @@ const UserController = class UserController {
 
     updateUser = async function (req, res) {
         try {
-            let data = await (new UserModel).updateUser(req.body);
+            let data = await userModel.updateUser(req.body);
             if (data.success) {
                 return res.status(200).json(data);
             }
@@ -49,7 +50,7 @@ const UserController = class UserController {
     deleteOne = async function (req, res) {
         let id = req.params.id;
         try {
-            let data = await (new UserModel).deletUser(id);
+            let data = await userModel.deletUser(id);
             if (data.success) {
                 return res.status(200).json(data);
             }
@@ -61,7 +62,7 @@ const UserController = class UserController {
 
     login = async function (req, res) {
         try {
-            let data = await (new UserModel).login(req.body);
+            let data = await userModel.login(req.body);
             if (data.success) {
                 return res.status(200).json(data);
             }

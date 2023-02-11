@@ -11,7 +11,6 @@ app.use((req, res, next) => {
     if (checkRoute) {
         return next();
     }
-    console.log(checkToken);
     if (checkToken) {
         return next();
     }

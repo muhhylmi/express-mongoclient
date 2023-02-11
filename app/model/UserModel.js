@@ -1,11 +1,14 @@
-const BaseDao = require("../helper/DatabaseHelper");
+const BaseDao = require("../helper/database/databaseHelper");
 const bcrypt = require("bcrypt");
 const { ObjectId } = require("bson");
 const jwt = require('jsonwebtoken');
-
+const connection = require('../helper/database/connection');
+const config = require('../config/config');
+const logger = require('../helper/logger');
 
 const UserModel = class UserModel extends BaseDao {
     collection = 'user';
+    db = connection.getConnection();
     UPDATE = 'update';
     ARCHIVE = 'archive';
 
@@ -32,7 +35,6 @@ const UserModel = class UserModel extends BaseDao {
             const hash = bcrypt.hashSync(request.password, 5);
             request.password = hash;
             let data = await (await this.insertOne(request));
-            console.log(data);
             if (data.acknowledged) {
                 return this.response(true, data, ['success add data'])
             } else {
@@ -98,27 +100,29 @@ const UserModel = class UserModel extends BaseDao {
             }
             return this.response(true, [], []);
         } catch (error) {
+            logger.error(ctx, 'Failed to delete user');
             return this.response(false, [], [err.message]);
         }
     }
 
     async login(request) {
+        const ctx = 'UserModel-login';
         try {
-            let data = await (await this.findOne({
+            let data = await this.findOne({
                 'username': request.username
-            }))
+            });
             if (data) {
                 let check_password = bcrypt.compareSync(request.password, data.password);
                 if (check_password) {
                     delete data.password;
                     data._id = data._id.toString();
-                    data.token = jwt.sign(data, process.env.PRIVATE_KEY_JWT, { expiresIn: '1d' });
+                    data.token = jwt.sign(data, config.get('/privateKeyJwt'), { expiresIn: '1d' });
                     return this.response(true, data, []);
                 }
             }
             return this.response(true, [], ['invalid credentials']);
         } catch (error) {
-            console.log(error);
+            logger.error(ctx, 'Failed to login');
             return this.response(false, [], [error.message]);
         }
     }
