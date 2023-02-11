@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
-const UserModel = require('../model/UserModel');
+const DBHelper = require('../helper/database/databaseHelper');
+const db = new DBHelper('user');
 
 
 app.use((req, res, next) => {
@@ -30,14 +31,14 @@ const checkRouteWithoutToken = (route) => {
     return false;
 }
 
-const checkAuthorization = function (token = null, res) {
+const checkAuthorization = async function (token = null, res) {
     if (token === null) {
         return false;
     }
     let tokenArray = token.split(" ");
     try {
         let decode = jwt.verify(tokenArray[1], process.env.PRIVATE_KEY_JWT);
-        let dataUser = (new UserModel).findOne({ 'username': decode.username });
+        let dataUser = db.findOne({ 'username': decode.username });
         let result = true;
         dataUser.then(res => {
             if (res) {

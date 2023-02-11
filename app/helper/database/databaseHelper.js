@@ -1,8 +1,8 @@
 const logger = require('../logger');
+const connection = require('./connection');
 
 class Database {
-    constructor(db, collection){
-        this.db = db,
+    constructor(collection){
         this.collection = collection
     }
 
@@ -10,7 +10,8 @@ class Database {
         const ctx = 'Database-aggregate'
         let cursor;
         try {
-            cursor = await this.db.collection(this.collection).aggregate(query);
+            const db = await connection.getConnection();
+            cursor = await db.collection(this.collection).aggregate(query);
         } catch (error) {
             logger.error(ctx, error.message, 'aggregate');
             return []
@@ -21,7 +22,8 @@ class Database {
     async findOne(query, project = {}) {
         let cursor;
         try {
-            cursor = await this.db.collection(this.collection).findOne(query, project);
+            const db = await connection.getConnection();
+            cursor = await db.collection(this.collection).findOne(query, project);
         } catch (error) {
             logger.error('DatabaseHelper-findOne', error.message);
             return [];
@@ -32,12 +34,13 @@ class Database {
     async find(query, project = {}) {
         let cursor;
         try {
-            cursor = await this.db.collection(this.collection).find(query, project);
+            const db = await connection.getConnection();
+            cursor = db.collection(this.collection).find(query, project);
         } catch (error) {
             logger.error('DatabaseHelper-find', error.message);
             return [];
         }
-        return cursor;
+        return cursor.toArray();
     }
 
     /**

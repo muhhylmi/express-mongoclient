@@ -1,25 +1,26 @@
-const BaseDao = require("../helper/database/databaseHelper");
-const bcrypt = require("bcrypt");
 const { ObjectId } = require("bson");
+const DBHelper = require('../helper/database/databaseHelper');
+const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
-const connection = require('../helper/database/connection');
 const config = require('../config/config');
 const logger = require('../helper/logger');
+const db = new DBHelper('user');
 
-const UserModel = class UserModel extends BaseDao {
-    collection = 'user';
-    db = connection.getConnection();
-    UPDATE = 'update';
-    ARCHIVE = 'archive';
+class UserModel {
 
+    constructor() {
+        this.db = db;
+        this.UPDATE = 'update';
+        this.ARCHIVE = 'archive';
+    }
 
     async getAllUser() {
         try {
-            let data = await (await this.find()).toArray();
+            const data = await db.find();
             data = data.map(value => {
                 delete value.password;
                 return value;
-            })
+            });
             return this.response(true, data, []);
         } catch (error) {
             return this.response(false, [], [error.message])
@@ -28,7 +29,7 @@ const UserModel = class UserModel extends BaseDao {
 
     async createUser(request) {
         try {
-            const check_username = await (await this.findOne({ 'username': request.username }));
+            const check_username = await (await db.findOne({ 'username': request.username }));
             if (check_username) {
                 return this.response(false, {}, ['username already exists']);
             }
@@ -47,7 +48,7 @@ const UserModel = class UserModel extends BaseDao {
 
     async findById(id) {
         try {
-            let data = await (await this.findOne({ '_id': new ObjectId(id) }))
+            let data = await (await db.findOne({ '_id': new ObjectId(id) }))
             if (data) {
                 delete data.password;
                 return this.response(true, data, []);
@@ -73,13 +74,13 @@ const UserModel = class UserModel extends BaseDao {
             }
             delete new_data._id;
             if (request.action == this.UPDATE) {
-                let update = await (await this.updateOne(query, { '$set': new_data }));
+                let update = await (await db.updateOne(query, { '$set': new_data }));
                 if (update.acknowledged) {
                     return this.response(true, update, []);
                 }
                 return this.response(false, [], ['data not updated'])
             } else if (request.action == this.ARCHIVE) {
-                let update = await (await this.updateOne(query, { '$set': { 'isArchive': true } }));
+                let update = await (await db.updateOne(query, { '$set': { 'isArchive': true } }));
                 if (update) {
                     return this.response(true, update, []);
                 }
@@ -94,7 +95,7 @@ const UserModel = class UserModel extends BaseDao {
     async deletUser(id) {
         let query = { '_id': new ObjectId(id) };
         try {
-            let data = await (await this.deleteOne(query))
+            let data = await (await db.deleteOne(query))
             if (data) {
                 return this.response(true, data, []);
             }
@@ -108,7 +109,7 @@ const UserModel = class UserModel extends BaseDao {
     async login(request) {
         const ctx = 'UserModel-login';
         try {
-            let data = await this.findOne({
+            let data = await db.findOne({
                 'username': request.username
             });
             if (data) {

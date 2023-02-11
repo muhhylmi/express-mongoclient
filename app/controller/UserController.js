@@ -1,7 +1,7 @@
 const UserModel = require("../model/UserModel");
 const userModel = new UserModel();
 
-const UserController = class UserController {
+class UserController {
     getAllUser = async function (req, res) {
         try {
             let data = await userModel.getAllUser();
@@ -68,7 +68,7 @@ const UserController = class UserController {
             }
             res.status(201).json(data);
         } catch (error) {
-            res.status(400).json(error.message);
+            res.status(500).json(error.message);
         }
     }
 }
