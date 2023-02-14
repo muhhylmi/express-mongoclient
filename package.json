@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint app",
+    "lint:fix": "npm run lint -- --fix"
   },
   "repository": {
     "type": "git",
@@ -28,5 +30,14 @@
     "mongodb": "^4.13.0",
     "uuid": "^9.0.0",
     "winston": "^3.8.2"
-  }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.5",
+    "@babel/eslint-parser": "^7.19.1",
+    "eslint": "^8.34.0",
+    "pre-commit": "^1.2.2"
+  },
+  "pre-commit": [
+    "lint"
+  ]
 }

@@ -6,28 +6,28 @@ const mongoPort = config.get('/mongoPort');
 let dbConn;
 
 const createConnection = async () => {
-    const url = `mongodb://${mongoHost}:${mongoPort}/express-mongo`;
-    const client = new MongoClient(url,
+  const url = `mongodb://${mongoHost}:${mongoPort}/express-mongo`;
+  const client = new MongoClient(url,
     {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
+      useNewUrlParser: true,
+      useUnifiedTopology: true
     });
-    const mongo = await client.connect();
-    dbConn = mongo.db(process.env.DB_NAME);
+  const mongo = await client.connect();
+  dbConn = mongo.db(process.env.DB_NAME);
 
-}
+};
 
 const getConnection = async () => {
-    if(!dbConn){
-        await createConnection();
-    }
-    return dbConn;
-}
+  if(!dbConn){
+    await createConnection();
+  }
+  return dbConn;
+};
 
 
 module.exports = {
-    createConnection,
-    getConnection
+  createConnection,
+  getConnection
 };
 
 
