@@ -18,7 +18,11 @@ app.use('*', function (req, res) {
     res.status(404).json({ status: false, message: 'page not found' });
 });
 
-dbConnection.getConnection();
-app.listen(PORT, () => {
-    logger.info('index', `Server started on port ${PORT}`, 'start server');
-})
+dbConnection.createConnection().then(()=> {
+    app.listen(PORT, () => {
+        logger.info('index', `Server started on port ${PORT}`, 'start server');
+    })
+}).catch((err)=> {
+    logger.error('index', 'Failed to get mongodb connection', 'getMongoDB', `Detail: ${err.message}`);
+});
+

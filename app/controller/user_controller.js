@@ -10,12 +10,13 @@ class UserController {
     }
 
     async createUser (req, res) {
-        const schema = validation.createUserSchema({ ...req.body });
-        const { error } = schema.validate({ ...req.body});
+        const payload = { ...req.body, userData: { ...req.user } };
+        const schema = validation.createUserSchema(payload);
+        const { error, value } = schema.validate(req.body);
         if(error){
             return response.error(res, error.message)
         }
-        const data = await userModel.createUser(req.body);
+        const data = await userModel.createUser(value);
         return res.send(data);
     }
 

@@ -28,21 +28,23 @@ class UserModel {
     }
 
     async createUser(request) {
-        try {
-            const check_username = await (await db.findOne({ 'username': request.username }));
-            if (check_username) {
-                return this.response(false, {}, ['username already exists']);
-            }
-            const hash = bcrypt.hashSync(request.password, 5);
-            request.password = hash;
-            let data = await (await db.insertOne(request));
-            if (data.acknowledged) {
-                return this.response(true, data, ['success add data'])
-            } else {
-                return this.response(false, {}, ['create user failed'])
-            }
-        } catch (err) {
-            return this.response(false, {}, [err.message])
+        const query = {
+            $or: [
+                { username: request.username },
+                { email: request.email }
+            ]
+        }
+        const check_username = await (await db.findOne(query));
+        if (check_username) {
+            return this.response(false, {}, ['username already exists']);
+        }
+        const hash = bcrypt.hashSync(request.password, 5);
+        request.password = hash;
+        let data = await (await db.insertOne(request));
+        if (data.acknowledged) {
+            return this.response(true, data, ['success add data'])
+        } else {
+            return this.response(false, {}, ['create user failed'])
         }
     }
 

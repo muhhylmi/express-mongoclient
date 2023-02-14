@@ -21,7 +21,6 @@ app.use( async (req, res, next) => {
 
 const checkRouteWithoutToken = (route) => {
     let routes = [
-        'POST /api/user',
         'PUT /api/user',
         'DELETE /api/user',
         'POST /api/user/login'
