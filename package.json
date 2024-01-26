@@ -1,0 +1,48 @@
+{
+  "name": "express-mongoclient",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc:dev": "tsc && nodemon ./build/index.js",
+    "build": "tsc",
+    "dev": "nodemon ./build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muhhylmi/express-mongoclient.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/muhhylmi/express-mongoclient/issues"
+  },
+  "homepage": "https://github.com/muhhylmi/express-mongoclient#readme",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/mongodb": "^4.0.7",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^20.11.5",
+    "nodemon": "^3.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/uuid": "^9.0.8",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "kafkajs": "^2.2.4",
+    "mongoose": "^7.6.3",
+    "pg": "^8.11.3",
+    "reflect-metadata": "^0.2.1",
+    "sequelize": "^6.35.2",
+    "sequelize-typescript": "^2.1.6",
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4"
+  }
+}

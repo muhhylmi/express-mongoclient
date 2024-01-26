@@ -1,0 +1,39 @@
+# Node.js
+node_modules/
+
+# TypeScript
+*.tsbuildinfo
+
+# Visual Studio Code
+.vscode/
+
+# Editor
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Dependency directories
+bower_components/
+jspm_packages/
+
+# Build output
+build/
+
+# Logs and databases
+*.log
+*.sqlite
+*.log.*
+
+# Environment variables
+.env
+
+# TypeScript cache
+*.tsbuildinfo
