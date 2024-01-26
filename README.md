@@ -15,11 +15,11 @@ sequenceDiagram
     API->>Postgres: save note
     API->>Kafka: prduce event
     Kafka->>MongoDB: save note 
-    Postgres-->API: response succes/failed
+    Postgres-->>API: response succes/failed
     alt succes save mongo
-        Kafka-->API: Commit event
+        Kafka-->>API: Commit event
     else failed save mongo
-        Kafka-->API: Un Commit event
+        Kafka-->>API: Un Commit event
     end
     API-->>User:response message
 ```
