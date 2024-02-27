@@ -1,18 +1,21 @@
-import { Request, Response, response } from "express";
+import { Request, Response } from "express";
 import { Note } from "../schemas/Model";
 import { wrapperResponseError, wrapperResponse } from "../../../helper/wrapper/wrapper";
-import { UcQueries } from "../use_case/Queries";
-import { UcCommand } from "../use_case/Commands";
+import { INoteUcCommands, UcCommand } from "../use_case/Commands";
+import EventKafka from "../../../helper/kafka/producer";
+import {INoteRepoCommands, RepoCommands}  from "../repositories/Commands";
+const repoCommand: INoteRepoCommands = new RepoCommands()
+const eventKafka = new EventKafka();
+const usecaseCommand: INoteUcCommands = new UcCommand(repoCommand, eventKafka)
 
+class CommandHandler {
 
-class NoteHandler {
-
-  async create(req: Request, res: Response) {
+  async create(req: Request, res: Response) {    
     const new_note = new Note();
     new_note.name = req.body.name;
     new_note.description = req.body.description;    
 
-    const create = await new UcCommand().save(new_note);
+    const create = await usecaseCommand.save(new_note);
     if (create.err) {
       return wrapperResponseError(res, create.statusCode, create.err.message)
     }
@@ -21,25 +24,11 @@ class NoteHandler {
 
   async delete(req: Request, res: Response) {
     let id = parseInt(req.params["id"]);
-    const response = await new UcCommand().delete(id);
+    const response = await usecaseCommand.delete(id);
     if (response.err) {
       return wrapperResponseError(res, response.statusCode, response.err.message)
     }
      return wrapperResponse(res, response.statusCode)
-  }
-
-  async findById(req: Request, res: Response) {
-      let id = parseInt(req.params["id"]);
-      const note = await new UcQueries().findByid(id);
-      if (note.err) {
-        return wrapperResponseError(res, note.statusCode, note.err.message)
-      }
-      return wrapperResponse(res, note.statusCode, note.data)
-  }
-
-  async findAll(req: Request, res: Response) {    
-      const notes = await new UcQueries().findAll();
-      return wrapperResponse(res, notes.statusCode, notes.data)
   }
 
   async update(req: Request, res: Response) {
@@ -50,7 +39,7 @@ class NoteHandler {
     new_note.name = req.body.name;
     new_note.description = req.body.description;
 
-    const response = await new UcCommand().update(new_note);
+    const response = await usecaseCommand.update(new_note);
     if (response.err) {
       return wrapperResponseError(res, response.statusCode, response.err.message)
     }
@@ -59,4 +48,4 @@ class NoteHandler {
   }
 }
 
-export default new NoteHandler()
+export default new CommandHandler()

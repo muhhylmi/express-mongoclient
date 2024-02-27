@@ -9,9 +9,9 @@ interface INote extends Document {
 }
 
 const noteSchema: Schema = new Schema({
-    id: { type: Number, required: true},
+    id: { type: Number, required: true, unique: true},
     name: { type: String, required: true },
-    description: { type: String, required: true, unique: true },
+    description: { type: String, required: true },
     createdAt: { type: String, required: true },
     updatedAt: { type: String, required: true }
 });

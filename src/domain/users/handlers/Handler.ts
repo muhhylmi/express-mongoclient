@@ -1,4 +1,4 @@
-import BaseRoutes from "../../../router/BaseRouter";
+import BaseRoutes from "../../../helper/router/BaseRouter";
 import NoteHandler from "../handlers/UserHandler";
 import validate from "../../../helper/validation/validate";
 import { createUserSchema, updateUserSchema, loginSchema } from "../schemas/Request";

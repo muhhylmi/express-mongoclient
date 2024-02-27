@@ -1,6 +1,6 @@
 import EventKafka from "../../../helper/kafka/producer";
 import { Wrapper, wrapperData, wrapperError } from "../../../helper/wrapper/wrapper";
-import { Commands } from "../repositories/Commands";
+import { INoteRepoCommands } from "../repositories/Commands";
 import { Note } from "../schemas/Model";
 
 interface INoteUcCommands {
@@ -9,13 +9,13 @@ interface INoteUcCommands {
     delete(noteId: number): Promise<Wrapper>;
 }
 
-export class UcCommand implements INoteUcCommands {
-    private command: Commands;
+class UcCommand implements INoteUcCommands {
+    private command: INoteRepoCommands;
     private eventKafka: EventKafka
   
-    constructor (){
-      this.command = new Commands()
-      this.eventKafka = new EventKafka()
+    constructor (command: INoteRepoCommands, eventKafka: EventKafka){
+      this.command = command
+      this.eventKafka = eventKafka
     }
 
     async kafkaSendProducer(result: any ) {
@@ -65,5 +65,6 @@ export class UcCommand implements INoteUcCommands {
         await this.command.delete(noteId);
         return wrapperData(200)
       }
-    
 }
+
+export { INoteUcCommands, UcCommand }

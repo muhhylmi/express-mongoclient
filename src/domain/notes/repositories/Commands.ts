@@ -6,7 +6,7 @@ interface INoteRepoCommands {
     delete(noteId: number): Promise<void>;
 }
 
-export class Commands implements INoteRepoCommands {
+class RepoCommands implements INoteRepoCommands {
     async save(note: Note): Promise<[Note | null, Error | null]> {
         try {
           const created = await Note.create({
@@ -56,3 +56,5 @@ export class Commands implements INoteRepoCommands {
         }
       }
 }
+
+export { INoteRepoCommands, RepoCommands }

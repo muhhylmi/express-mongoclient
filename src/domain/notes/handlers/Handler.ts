@@ -1,20 +1,21 @@
-import BaseRoutes from "../../../router/BaseRouter";
-import NoteHandler from "../handlers/NoteHandler";
+import BaseRoutes from "../../../helper/router/BaseRouter";
 import validate from "../../../helper/validation/validate";
 import { createNoteSchema, updateNoteSchema } from "../schemas/Request";
 import { jwtAuth } from "../../../helper/middleware/jwtAuth";
+import CommandHandler from "./CommandHandler";
+import QueryHandler from "./QueryHandler";
 
 class NoteRoutes extends BaseRoutes {
   public routes(): void {
-    this.router.post("", jwtAuth, validate(createNoteSchema), NoteHandler.create);
+    this.router.post("", jwtAuth, validate(createNoteSchema), CommandHandler.create);
     this.router.patch(
       "/:id",
       validate(updateNoteSchema),
-      NoteHandler.update
+      CommandHandler.update
     );
-    this.router.delete("/:id", NoteHandler.delete);
-    this.router.get("", jwtAuth, NoteHandler.findAll);
-    this.router.get("/:id", NoteHandler.findById);
+    this.router.delete("/:id", CommandHandler.delete);
+    this.router.get("", jwtAuth, QueryHandler.findAll);
+    this.router.get("/:id", QueryHandler.findById);
   }
 }
 
