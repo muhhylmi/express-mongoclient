@@ -5,7 +5,7 @@ interface INoteRepoQueries {
   retrieveAll(): Promise<Note[]>;
 }
 
-export class Queries implements INoteRepoQueries {
+class RepoQueries implements INoteRepoQueries {
   async retrieveById(noteId: number): Promise<[Note | null, Error | null]> {
     const new_note = await Note.findOne({
       where: {
@@ -27,3 +27,5 @@ export class Queries implements INoteRepoQueries {
   }
   
 }
+
+export { INoteRepoQueries, RepoQueries};

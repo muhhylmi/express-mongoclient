@@ -1,13 +1,16 @@
 import { Request, Response } from 'express';
 import { wrapperResponseError, wrapperResponse } from '../../../helper/wrapper/wrapper';
-import { UcQueries } from '../use_case/Queries';
+import { INoteUcQueries, UcQueries } from '../use_case/Queries';
+import { INoteRepoQueries, RepoQueries } from '../repositories/Queries';
+const repoQueries: INoteRepoQueries = new RepoQueries();
+const usecaseQueries: INoteUcQueries = new UcQueries(repoQueries);
 
 
 class QueryHandler {
 
   async findById(req: Request, res: Response) {
     const id = parseInt(req.params['id']);
-    const note = await new UcQueries().findByid(id);
+    const note = await usecaseQueries.findById(id);
     if (note.err) {
       return wrapperResponseError(res, note.statusCode, note.err.message);
     }
@@ -15,7 +18,7 @@ class QueryHandler {
   }
 
   async findAll(req: Request, res: Response) {    
-    const notes = await new UcQueries().findAll();
+    const notes = await usecaseQueries.findAll();
     return wrapperResponse(res, notes.statusCode, notes.data);
   }
 }

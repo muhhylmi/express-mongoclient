@@ -1,6 +1,8 @@
-const kafkaInstances:object[] = [];
+import KafkaConsumer from './consumer';
 
-const registerKafkaInstance = (kafkaInstance: object) => {
+const kafkaInstances:KafkaConsumer[] = [];
+
+const registerKafkaInstance = (kafkaInstance: KafkaConsumer) => {
   kafkaInstances.push(kafkaInstance);
 };
 

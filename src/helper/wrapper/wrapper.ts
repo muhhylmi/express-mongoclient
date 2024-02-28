@@ -6,7 +6,7 @@ interface Wrapper {
     data?: object | string | null
 }
 
-const wrapperResponse = (res: Response, statusCode: number, data?: object):Response => {
+const wrapperResponse = (res: Response, statusCode: number, data?: object | string | null):Response => {
   return res.status(statusCode).json({
     status: 'Created!',
     message: 'Successfully request data',

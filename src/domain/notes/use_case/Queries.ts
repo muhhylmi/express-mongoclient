@@ -1,18 +1,18 @@
 import { Wrapper, wrapperData, wrapperError } from '../../../helper/wrapper/wrapper';
-import { Queries } from '../repositories/Queries';
+import { INoteRepoQueries } from '../repositories/Queries';
 
 interface INoteUcQueries {
-  findByid(noteId: number): Promise<Wrapper>;
+  findById(noteId: number): Promise<Wrapper>;
   findAll(): Promise<Wrapper>;
 }
 
-export class UcQueries implements INoteUcQueries {
-  private query: Queries;
+class UcQueries implements INoteUcQueries {
+  private query: INoteRepoQueries;
   
-  constructor (){
-    this.query = new Queries();
+  constructor (query: INoteRepoQueries){
+    this.query = query;
   }
-  async findByid(noteId: number): Promise<Wrapper> {
+  async findById(noteId: number): Promise<Wrapper> {    
     const note = await this.query.retrieveById(noteId);
     if (note[1]) {
       return wrapperError(404, new Error('Note Is Not Found'));
@@ -26,3 +26,5 @@ export class UcQueries implements INoteUcQueries {
   }
     
 }
+
+export { INoteUcQueries, UcQueries };

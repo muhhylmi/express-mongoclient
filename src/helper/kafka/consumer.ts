@@ -1,5 +1,6 @@
 import { Consumer, Kafka, KafkaConfig, PartitionAssigners } from 'kafkajs';
 import { config } from '../config/globalConfig';
+import { Wrapper } from '../wrapper/wrapper';
 const kafkaHost = config.KAFKA_HOSTS;
 
 
@@ -7,7 +8,7 @@ class KafkaConsumer {
   private option: KafkaConfig;
   private kafkaClient: Kafka;
   private consumer: Consumer;
-  private topics: Record<string, (value: Buffer | null, header: string) => void | Error> = {};
+  private topics: Record<string, (value: Buffer | null, header: string) => void | Error | Promise<Wrapper>> = {};
   private groupId: string;
   private concurrencyNumber: number;
   private health: boolean;
@@ -32,7 +33,7 @@ class KafkaConsumer {
     this.health = false;
   }
 
-  registerTopic(topic: string, handler: (value: Buffer | null, header: string) => void | Error) {
+  registerTopic(topic: string, handler: (value: Buffer | null, header: string) => void | Error | Promise<Wrapper>) {
     this.topics[topic] = handler;
   }
 
