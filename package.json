@@ -9,7 +9,8 @@
     "dev": "nodemon ./build/index.js",
     "lint": "eslint . --ext .ts",
     "lint:fix": "npm run lint -- --fix",
-    "test": "ts-mocha --exit test/**/*.test.ts"
+    "test": "ts-mocha --exit test/**/*.test.ts",
+    "cover": "nyc --reporter=lcov --reporter=text --reporter=text-summary ts-mocha --exit test/**/*.test.ts"
   },
   "repository": {
     "type": "git",
@@ -34,8 +35,11 @@
     "@typescript-eslint/parser": "^7.1.0",
     "chai": "^5.1.0",
     "eslint": "^8.57.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "mocha": "^10.3.0",
     "nodemon": "^3.0.3",
+    "nyc": "^15.1.0",
     "sinon": "^17.0.1",
     "supertest": "^6.3.4",
     "ts-mocha": "^10.0.0",
@@ -57,5 +61,38 @@
     "sequelize-typescript": "^2.1.6",
     "uuid": "^9.0.1",
     "zod": "^3.22.4"
+  },
+  "nyc": {
+    "branches": 60,
+    "functions": 60,
+    "lines": 60,
+    "statements": 60,
+    "reporter": [
+      "lcov",
+      "text",
+      "text-summary"
+    ],
+    "all": true,
+    "extension": [
+      ".ts"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "node_modules",
+      "**/*.test.ts"
+    ]
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "npm run lint",
+      "npm run test"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }

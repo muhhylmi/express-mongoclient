@@ -37,3 +37,7 @@ build/
 
 # TypeScript cache
 *.tsbuildinfo
+
+# unit test result
+.nyc_output
+coverage
