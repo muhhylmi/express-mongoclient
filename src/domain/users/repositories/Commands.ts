@@ -1,4 +1,4 @@
-import { User } from "../schemas/Model";
+import { User } from '../schemas/Model';
 
 interface IUserRepoCommands {
     save(user: User): Promise<Error | null>;
@@ -14,9 +14,9 @@ export class Commands implements IUserRepoCommands {
         username: user.username,
         password: user.password,
       });
-      return null
+      return null;
     } catch (error) {
-      return new Error("Failed to create user!")
+      return new Error('Failed to create user!');
     }
   }
 
@@ -28,14 +28,14 @@ export class Commands implements IUserRepoCommands {
         },
       });
       if (!newUser) {
-        return new Error("Failed to update note!")
+        return new Error('Failed to update note!');
       }
-      newUser.username = newUser.username;
-      newUser.password = newUser.password;
+      newUser.username = user.username;
+      newUser.password = user.password;
       await newUser.save();
-      return null
+      return null;
     } catch (error) {
-      return new Error("Failed to update user!")
+      return new Error('Failed to update user!');
     }
   }
 
@@ -47,12 +47,12 @@ export class Commands implements IUserRepoCommands {
         },
       });
       if (!newUser) {
-        throw new Error("User not found!");
+        throw new Error('User not found!');
       }
 
       await newUser.destroy();
     } catch (error) {
-      throw new Error("Failed to delete user!");
+      throw new Error('Failed to delete user!');
     }
   }
 }

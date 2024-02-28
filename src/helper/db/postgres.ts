@@ -1,7 +1,7 @@
-import { Sequelize } from "sequelize-typescript";
-import { Note } from "../../domain/notes/schemas/Model";
-import { GlobalConfig } from "../config/globalConfig";
-import { User } from "../../domain/users/schemas/Model";
+import { Sequelize } from 'sequelize-typescript';
+import { Note } from '../../domain/notes/schemas/Model';
+import { GlobalConfig } from '../config/globalConfig';
+import { User } from '../../domain/users/schemas/Model';
 
 
 class Database {
@@ -19,7 +19,7 @@ class Database {
       password: config.POSTGRES_PASSWORD,
       host: config.POSTGRES_HOST,
       port: config.POSTGRES_PORT,
-      dialect: "postgres",
+      dialect: 'postgres',
       models:[Note, User]
     });
 
@@ -27,11 +27,11 @@ class Database {
       .authenticate()
       .then(() => {
         console.log(
-          "✅ PostgreSQL Connection has been established successfully."
+          '✅ PostgreSQL Connection has been established successfully.'
         );
       })
       .catch((err) => {
-        console.error("❌ Unable to connect to the PostgreSQL database:", err);
+        console.error('❌ Unable to connect to the PostgreSQL database:', err);
       });
   }
 }

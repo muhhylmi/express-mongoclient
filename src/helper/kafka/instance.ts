@@ -1,4 +1,4 @@
-const kafkaInstances:any[] = [];
+const kafkaInstances:object[] = [];
 
 const registerKafkaInstance = (kafkaInstance: object) => {
   kafkaInstances.push(kafkaInstance);
@@ -6,4 +6,4 @@ const registerKafkaInstance = (kafkaInstance: object) => {
 
 const getRegisteredKafkaInstances = () => kafkaInstances;
 
-export {registerKafkaInstance, getRegisteredKafkaInstances}
+export {registerKafkaInstance, getRegisteredKafkaInstances};
